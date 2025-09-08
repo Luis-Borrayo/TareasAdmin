@@ -1,4 +1,4 @@
-package com.luisborrayo.tareasadmin.service;
+package com.luisborrayo.tareasadmin.Service;
 
 import com.luisborrayo.tareasadmin.Repositories.TaskRepository;
 import com.luisborrayo.tareasadmin.models.Tareas;

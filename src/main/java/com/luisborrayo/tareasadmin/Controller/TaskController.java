@@ -2,7 +2,7 @@ package com.luisborrayo.tareasadmin.Controller;
 
 
 import com.luisborrayo.tareasadmin.models.Tareas;
-import com.luisborrayo.tareasadmin.service.TaskService;
+import com.luisborrayo.tareasadmin.Service.TaskService;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
