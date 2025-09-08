@@ -37,9 +37,7 @@ public class TaskService {
     }
 
     public boolean completar(Long id) {
-        // Como tu modelo no tiene campo "completada", podemos simularlo eliminando o marcando en descripcion.
-        // Mejor opción: extender modelo con boolean completada. Pero aquí mostraremos un ejemplo simple que
-        // agrega la palabra "(COMPLETADA)" al nombre si no existe.
+
         Optional<Tareas> op = repo.findById(id);
         if (op.isPresent()) {
             Tareas t = op.get();

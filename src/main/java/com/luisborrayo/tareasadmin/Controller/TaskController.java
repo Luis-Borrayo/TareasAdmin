@@ -25,12 +25,10 @@ public class TaskController implements Serializable {
     @Inject
     private TaskService service;
 
-    // Para mostrar lista en la vista
     public List<Tareas> getTareas() {
         return service.listar();
     }
 
-    // Acción para agregar tarea (se puede llamar desde p:commandButton)
     public void agregar() {
         if (nombre == null || nombre.trim().isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null,
@@ -45,7 +43,6 @@ public class TaskController implements Serializable {
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Tarea agregada", "ID " + t.getId()));
     }
 
-    // Acción para eliminar
     public void eliminar(Tareas tarea) {
         if (tarea == null || tarea.getId() == null) return;
         boolean ok = service.eliminar(tarea.getId());
@@ -58,7 +55,6 @@ public class TaskController implements Serializable {
         }
     }
 
-    // Acción para marcar como completada
     public void completar(Tareas tarea) {
         if (tarea == null || tarea.getId() == null) return;
         boolean ok = service.completar(tarea.getId());
@@ -71,7 +67,6 @@ public class TaskController implements Serializable {
         }
     }
 
-    // Getters / Setters para el formulario
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
     public String getDescripcion() { return descripcion; }
