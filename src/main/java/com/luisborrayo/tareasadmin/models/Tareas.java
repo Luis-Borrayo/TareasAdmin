@@ -36,6 +36,13 @@ public class Tareas implements java.io.Serializable {
         this.descripcion = descripcion;
     }
 
+    public String getFechaCreacion() {
+        return fechaCreacion;
+    }
+    public void setFechaCreacion(String fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(this == obj) return true;

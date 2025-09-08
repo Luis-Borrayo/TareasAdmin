@@ -9,66 +9,86 @@
 </h:head>
 
 <h:body>
-    <!-- Growl global -->
     <h:form id="growlForm">
         <p:growl id="msgs" showDetail="true" life="3000"/>
     </h:form>
 
-    <h:form id="mainForm">
-        <p:panel header="Nueva Tarea">
-            <p:panelGrid columns="2" columnClasses="etiqueta,valor" layout="flex">
-                <h:outputLabel for="nombre" value="Título:"/>
-                <p:inputText id="nombre" value="#{taskController.nombre}" required="true" maxlength="100"/>
-
-                <h:outputLabel for="desc" value="Descripción:"/>
-                <p:inputTextarea id="desc" value="#{taskController.descripcion}" autoResize="true" rows="3"/>
-            </p:panelGrid>
-
-            <p:commandButton value="Agregar" icon="pi pi-plus"
-                             actionListener="#{taskController.agregar}"
-                             update=":mainForm:tabla :growlForm:msgs"
-                             process="@form"/>
+    <h:form id="formCrear">
+        <p:panel header="Crear nueva tarea">
+            <div class="p-grid">
+                <div class="p-col-6">
+                    <h:outputLabel for="nombre" value="Título:" />
+                    <p:inputText id="nombre" value="#{taskController.nombre}" required="true" maxlength="100" style="width:100%"/>
+                </div>
+                <div class="p-col-6">
+                    <h:outputLabel for="desc" value="Descripción:" />
+                    <p:inputTextarea id="desc" value="#{taskController.descripcion}" autoResize="true" rows="3" style="width:100%"/>
+                </div>
+            </div>
+            <div class="p-mt-2 p-d-flex p-jc-end">
+                <p:commandButton value="Agregar" icon="pi pi-plus"
+                                 actionListener="#{taskController.agregar}"
+                                 update=":formListado:tabla :growlForm:msgs @form"
+                                 process="@form"/>
+            </div>
         </p:panel>
+    </h:form>
 
-        <p:spacer height="20"/>
 
+    <p:spacer height="20"/>
+
+    <h:form id="formListado">
         <p:panel header="Listado de Tareas">
             <p:dataTable id="tabla" value="#{taskController.tareas}" var="t"
                          paginator="true" rows="8" emptyMessage="No hay tareas registradas">
 
                 <p:column headerText="ID" style="width:60px; text-align:center">
-                    <h:outputText value="#{t.id}"/>
+                    <h:outputText value="#{t.id}" />
                 </p:column>
 
                 <p:column headerText="Título">
-                    <h:outputText value="#{t.nombre}"/>
+                    <h:outputText value="#{t.nombre}" />
                 </p:column>
 
                 <p:column headerText="Descripción">
-                    <h:outputText value="#{t.descripcion}"/>
+                    <h:outputText value="#{t.descripcion}" />
+                </p:column>
+
+                <p:column headerText="Fecha" style="width:130px; text-align:center">
+                    <h:outputText value="#{t.fechaCreacion}" />
                 </p:column>
 
                 <p:column headerText="Acciones" style="width:220px; text-align:center">
+
                     <p:commandButton value="Completar" icon="pi pi-check"
                                      actionListener="#{taskController.completar(t)}"
-                                     update=":mainForm:tabla :growlForm:msgs"/>
-                    <p:commandButton value="Eliminar" icon="pi pi-trash" styleClass="p-button-danger"
-                                     actionListener="#{taskController.eliminar(t)}"
-                                     update=":mainForm:tabla :growlForm:msgs">
-                        <p:confirm header="Confirmación"
-                                   message="¿Eliminar la tarea '#{t.nombre}'?"
-                                   icon="pi pi-exclamation-triangle"/>
-                    </p:commandButton>
+                                     update=":formListado:tabla :growlForm:msgs"
+                                     immediate="true"/>
+
+                    <p:commandButton icon="pi pi-trash" styleClass="p-button-danger p-ml-2"
+                                     title="Eliminar"
+                                     actionListener="#{taskController.prepararEliminar(t)}"
+                                     oncomplete="PF('confirmDlg').show()"
+                                     process="@this"
+                                     immediate="true"
+                                     update=":growlForm:msgs"/>
                 </p:column>
             </p:dataTable>
         </p:panel>
+        <p:confirmDialog widgetVar="confirmDlg" modal="true" header="Confirmación" closable="false">
+            <h:outputText value="¿Eliminar la tarea: " />
+            <h:outputText value="#{taskController.selectedTarea.nombre}" style="font-weight:bold"/>
+            <h:outputText value=" ?" />
 
-        <!-- confirm dialog -->
-        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-            <p:commandButton value="Sí" type="button"
-                             styleClass="p-confirm-dialog-accept" icon="pi pi-check"/>
-            <p:commandButton value="No" type="button"
-                             styleClass="p-confirm-dialog-reject p-button-secondary" icon="pi pi-times"/>
+            <p:separator/>
+            <p:commandButton value="Sí" icon="pi pi-check" styleClass="p-button-danger"
+                             actionListener="#{taskController.eliminarSeleccionado}"
+                             update=":formListado:tabla :growlForm:msgs"
+                             oncomplete="PF('confirmDlg').hide()"/>
+
+            <p:commandButton value="No" icon="pi pi-times"
+                             styleClass="p-button-secondary"
+                             onclick="PF('confirmDlg').hide(); return false;"/>
         </p:confirmDialog>
     </h:form>
 </h:body>
